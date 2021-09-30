@@ -26,8 +26,15 @@ describe("Form", () => {
     userEvent.type(lastNameInput, "last name");
     userEvent.click(submitButton);
 
-    await waitFor(() => expect(mockSaveData).toHaveBeenCalled(), {
-      timeout: 5000,
-    });
+    await waitFor(
+      () =>
+        expect(mockSaveData).toHaveBeenCalledWith({
+          firstName: "first name",
+          lastName: "last name",
+        }),
+      {
+        timeout: 5000,
+      }
+    );
   });
 });
