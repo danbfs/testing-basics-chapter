@@ -2,19 +2,20 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 
-type FormData = {
+export type FormData = {
   firstName: string;
   lastName: string;
 };
 
-export default function Form() {
+const Form: React.FC<{ saveData: (data: FormData) => void }> = ({
+  saveData,
+}) => {
   const {
     register,
     setValue,
     handleSubmit,
     getValues,
     setError,
-    clearErrors,
     formState: { errors },
   } = useForm<FormData>();
 
@@ -31,7 +32,7 @@ export default function Form() {
 
   const onSubmit = handleSubmit((data) => {
     handleEmptyFields();
-    console.log(data);
+    saveData(data);
   });
 
   const fillMock = () => {
@@ -61,21 +62,20 @@ export default function Form() {
         });
       }
     }
-    console.log(errors);
   };
 
   return (
     <div>
       <form onSubmit={onSubmit}>
-        <label>First name</label>
-        <input {...register("firstName")} />
+        <label htmlFor="firstName">First name</label>
+        <input aria-label="First name" {...register("firstName")} />
         <ErrorMessage
           errors={errors}
           name="firstName"
           render={({ message }) => <p className="error">{message}</p>}
         />
-        <label>Last name</label>
-        <input {...register("lastName")} />
+        <label htmlFor="lastName">Last name</label>
+        <input aria-label="Last name" {...register("lastName")} />
         <ErrorMessage
           errors={errors}
           name="lastName"
@@ -88,4 +88,6 @@ export default function Form() {
       <button onClick={fillInfo}>Fill info</button>
     </div>
   );
-}
+};
+
+export default Form;
